@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIP Calculator - Fixi Financial Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #fce4ec);
+      padding: 20px;
+      color: #1565c0;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .calculator {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+    .result {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #0d47a1;
+    }
+    a.back {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: #1e88e5;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <h2>SIP Calculator</h2>
+
+    <label for="monthlyInvestment">Monthly Investment (₹):</label>
+    <input type="number" id="monthlyInvestment" placeholder="e.g. 5000" />
+
+    <label for="annualReturn">Expected Annual Return Rate (%):</label>
+    <input type="number" id="annualReturn" placeholder="e.g. 12" />
+
+    <label for="investmentPeriod">Investment Period:</label>
+    <input type="number" id="investmentPeriod" placeholder="e.g. 10" />
+
+    <label for="periodType">Period Type:</label>
+    <select id="periodType">
+      <option value="years">Years</option>
+      <option value="months">Months</option>
+    </select>
+
+    <button onclick="calculateSIP()">Calculate</button>
+
+    <div class="result" id="result"></div>
+
+    <a href="../index.html" class="back">← Back to Home</a>
+  </div>
+
+  <script>
+    function formatNumber(num) {
+      return num.toLocaleString('en-IN', {maximumFractionDigits: 2});
+    }
+
+    function calculateSIP() {
+      const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+      const annualReturn = parseFloat(document.getElementById('annualReturn').value);
+      let period = parseFloat(document.getElementById('investmentPeriod').value);
+      const periodType = document.getElementById('periodType').value;
+
+      if (periodType === 'years') {
+        period = period * 12;
+      }
+
+      const monthlyRate = annualReturn / (12 * 100);
+      const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, period) - 1) * (1 + monthlyRate)) / monthlyRate;
+      const investedAmount = monthlyInvestment * period;
+      const gains = futureValue - investedAmount;
+
+      document.getElementById('result').innerHTML = `
+        Total Value: ₹ ${formatNumber(futureValue)}<br/>
+        Total Invested: ₹ ${formatNumber(investedAmount)}<br/>
+        Estimated Gains: ₹ ${formatNumber(gains)}
+      `;
+    }
+  </script>
+
+</body>
+</html>
